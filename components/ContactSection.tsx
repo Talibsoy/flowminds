@@ -33,7 +33,7 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-28 px-6 relative overflow-hidden">
+    <section id="contact" className="py-16 md:py-28 px-4 sm:px-6 relative overflow-hidden">
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px"
         style={{ background: "linear-gradient(90deg, transparent, #7C3AED44, transparent)" }}
@@ -55,7 +55,7 @@ export default function ContactSection() {
             Let&apos;s Talk
           </span>
           <h2
-            className="text-4xl md:text-5xl font-bold"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold"
             style={{ fontFamily: "var(--font-space)" }}
           >
             Start Your{" "}
@@ -71,7 +71,7 @@ export default function ContactSection() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
           onSubmit={handleSubmit}
-          className="rounded-2xl p-8 border-gradient flex flex-col gap-5"
+          className="rounded-2xl p-5 sm:p-8 border-gradient flex flex-col gap-4 sm:gap-5"
           style={{ background: "#13131A" }}
         >
           {/* Name */}

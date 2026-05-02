@@ -26,7 +26,7 @@ export default function TechSection() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="tech" className="py-28 px-6 relative overflow-hidden">
+    <section id="tech" className="py-16 md:py-28 px-4 sm:px-6 relative overflow-hidden">
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px"
         style={{ background: "linear-gradient(90deg, transparent, #A855F744, transparent)" }}
@@ -44,7 +44,7 @@ export default function TechSection() {
             Our Stack
           </span>
           <h2
-            className="text-4xl md:text-5xl font-bold"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold"
             style={{ fontFamily: "var(--font-space)" }}
           >
             Built With The{" "}
@@ -59,7 +59,7 @@ export default function TechSection() {
         {/* Tech grid */}
         <motion.div
           ref={ref}
-          className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3"
+          className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-8 gap-2 sm:gap-3"
         >
           {techs.map((tech, i) => (
             <motion.div

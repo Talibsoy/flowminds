@@ -65,7 +65,7 @@ export default function ProjectsSection() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="projects" className="py-28 px-6 relative">
+    <section id="projects" className="py-16 md:py-28 px-4 sm:px-6 relative">
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px"
         style={{ background: "linear-gradient(90deg, transparent, #06B6D444, transparent)" }}
@@ -84,7 +84,7 @@ export default function ProjectsSection() {
             Portfolio
           </span>
           <h2
-            className="text-4xl md:text-5xl font-bold"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold"
             style={{ fontFamily: "var(--font-space)" }}
           >
             Featured{" "}

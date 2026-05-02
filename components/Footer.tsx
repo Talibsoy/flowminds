@@ -10,11 +10,11 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative py-16 px-6 border-t" style={{ borderColor: "#1E1E2E" }}>
+    <footer className="relative py-12 md:py-16 px-4 sm:px-6 border-t" style={{ borderColor: "#1E1E2E" }}>
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {/* Brand */}
-          <div className="md:col-span-2">
+          <div className="col-span-2 md:col-span-2">
             <a href="#hero" className="flex items-center gap-2.5 mb-4">
               <Logo size={34} />
               <span
