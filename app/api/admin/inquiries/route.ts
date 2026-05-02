@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import { cookies } from "next/headers";
 
 export async function GET(req: NextRequest) {
@@ -10,6 +10,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const supabase = getSupabase();
   const { data, error } = await supabase
     .from("inquiries")
     .select("*")
