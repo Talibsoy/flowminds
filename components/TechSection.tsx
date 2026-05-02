@@ -26,7 +26,7 @@ export default function TechSection() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="tech" className="py-16 md:py-28 px-4 sm:px-6 relative overflow-hidden">
+    <section id="tech" className="py-16 md:py-28 px-5 sm:px-8 relative overflow-x-hidden">
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px"
         style={{ background: "linear-gradient(90deg, transparent, #A855F744, transparent)" }}

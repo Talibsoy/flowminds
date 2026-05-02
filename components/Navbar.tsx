@@ -30,7 +30,7 @@ export default function Navbar() {
         scrolled ? "glass border-b border-purple-500/10 py-3" : "py-5"
       }`}
     >
-      <nav className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <nav className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between">
         {/* Logo */}
         <a href="#hero" className="flex items-center gap-2.5 group">
           <Logo size={34} />

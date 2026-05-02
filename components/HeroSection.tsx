@@ -10,7 +10,7 @@ const fadeUp = (delay: number) => ({
 
 export default function HeroSection() {
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden px-4">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-x-hidden px-5 sm:px-8">
       {/* BG orbs */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full animate-pulse-glow"
