@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, Zap, Eye, EyeOff } from "lucide-react";
+import { Lock, Eye, EyeOff } from "lucide-react";
+import Logo from "@/components/Logo";
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -42,10 +43,8 @@ export default function AdminLogin() {
 
       <div className="relative w-full max-w-sm">
         {/* Logo */}
-        <div className="flex items-center justify-center gap-2 mb-8">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center">
-            <Zap size={18} className="text-white" />
-          </div>
+        <div className="flex items-center justify-center gap-2.5 mb-8">
+          <Logo size={32} />
           <span className="text-xl font-bold" style={{ fontFamily: "var(--font-space)", color: "#F8F8FF" }}>
             Flow<span style={{ background: "linear-gradient(135deg,#A855F7,#06B6D4)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Minds</span>
           </span>

@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import Logo from "@/components/Logo";
 
 const links = [
   { label: "Services", href: "#services" },
@@ -31,10 +32,8 @@ export default function Navbar() {
     >
       <nav className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <a href="#hero" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center">
-            <Zap size={16} className="text-white" />
-          </div>
+        <a href="#hero" className="flex items-center gap-2.5 group">
+          <Logo size={28} />
           <span
             className="text-lg font-bold tracking-tight"
             style={{ fontFamily: "var(--font-space)" }}

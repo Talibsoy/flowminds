@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Zap, LogOut, Mail, Clock, CheckCircle, MessageCircle, RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
+import { LogOut, Mail, Clock, CheckCircle, MessageCircle, RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
+import Logo from "@/components/Logo";
 import type { Inquiry } from "@/lib/supabase";
 
 const STATUS_CONFIG = {
@@ -58,9 +59,7 @@ export default function AdminDashboard() {
         style={{ background: "rgba(10,10,15,0.9)", borderBottom: "1px solid #1E1E2E", backdropFilter: "blur(12px)" }}
       >
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center">
-            <Zap size={15} className="text-white" />
-          </div>
+          <Logo size={22} />
           <div>
             <span className="font-semibold text-sm" style={{ fontFamily: "var(--font-space)" }}>
               FlowMinds Admin

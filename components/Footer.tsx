@@ -1,4 +1,5 @@
-import { Zap, X, ExternalLink } from "lucide-react";
+import { X, ExternalLink } from "lucide-react";
+import Logo from "@/components/Logo";
 
 const links = {
   Services: ["AI Web Development", "Social Media Automation", "Meta Solutions", "Code Automation"],
@@ -14,10 +15,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="md:col-span-2">
-            <a href="#hero" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-cyan-500 flex items-center justify-center">
-                <Zap size={16} className="text-white" />
-              </div>
+            <a href="#hero" className="flex items-center gap-2.5 mb-4">
+              <Logo size={28} />
               <span
                 className="text-lg font-bold"
                 style={{ fontFamily: "var(--font-space)" }}
