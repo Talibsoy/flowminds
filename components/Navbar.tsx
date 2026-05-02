@@ -33,7 +33,7 @@ export default function Navbar() {
       <nav className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <a href="#hero" className="flex items-center gap-2.5 group">
-          <Logo size={28} />
+          <Logo size={34} />
           <span
             className="text-lg font-bold tracking-tight"
             style={{ fontFamily: "var(--font-space)" }}

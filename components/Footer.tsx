@@ -16,7 +16,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <a href="#hero" className="flex items-center gap-2.5 mb-4">
-              <Logo size={28} />
+              <Logo size={34} />
               <span
                 className="text-lg font-bold"
                 style={{ fontFamily: "var(--font-space)" }}
