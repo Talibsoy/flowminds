@@ -1,0 +1,19 @@
+<svg viewBox="0 0 280 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#4F8EF7"/>
+      <stop offset="45%"  stop-color="#5B21B6"/>
+      <stop offset="100%" stop-color="#A855F7"/>
+    </linearGradient>
+  </defs>
+  <path
+    d="M 140,60 C 140,22 112,4 74,4 C 36,4 8,28 8,60 C 8,92 36,116 74,116 C 112,116 140,98 140,60 C 140,22 168,4 206,4 C 244,4 272,28 272,60 C 272,92 244,116 206,116 C 168,116 140,98 140,60"
+    stroke="url(#g)" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <line x1="118" y1="50" x2="78" y2="28" stroke="#4F8EF7" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="72" cy="24" r="7" stroke="#4F8EF7" stroke-width="3" fill="none"/>
+  <line x1="162" y1="50" x2="202" y2="28" stroke="#A855F7" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="208" cy="24" r="7" stroke="#A855F7" stroke-width="3" fill="none"/>
+  <line x1="162" y1="70" x2="202" y2="86" stroke="#A855F7" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="208" cy="92" r="7" stroke="#A855F7" stroke-width="3" fill="none"/>
+  <circle cx="140" cy="60" r="12" fill="#5B21B6"/>
+</svg>
