@@ -15,7 +15,7 @@ const services = [
 
 export default function ServicesSection() {
   return (
-    <section id="services" className="py-16 md:py-28 px-5 sm:px-8 relative overflow-x-hidden">
+    <section id="services" className="py-16 md:py-28 px-5 sm:px-8 relative" style={{ overflow: "hidden", maxWidth: "100vw" }}>
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] md:w-[600px] h-px"
         style={{ background: "linear-gradient(90deg, transparent, #7C3AED44, transparent)" }} />
 

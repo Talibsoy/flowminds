@@ -10,7 +10,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative py-12 md:py-16 px-5 sm:px-8 border-t overflow-x-hidden" style={{ borderColor: "#1E1E2E" }}>
+    <footer className="relative py-12 md:py-16 px-5 sm:px-8 border-t" style={{ borderColor: "#1E1E2E", overflow: "hidden", maxWidth: "100vw" }}>
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {/* Brand */}

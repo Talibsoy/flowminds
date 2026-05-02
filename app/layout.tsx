@@ -54,8 +54,16 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${spaceGrotesk.variable}`}
+      style={{ overflowX: "hidden", maxWidth: "100%" }}
     >
-      <body className="antialiased">{children}</body>
+      <body
+        className="antialiased"
+        style={{ overflowX: "hidden", maxWidth: "100%", width: "100%" }}
+      >
+        <div style={{ overflowX: "hidden", width: "100%" }}>
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
