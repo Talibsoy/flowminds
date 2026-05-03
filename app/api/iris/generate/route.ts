@@ -5,12 +5,25 @@ import { sendTelegramMessage } from "@/lib/iris-poster";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
+// Vercel Cron calls GET
+export async function GET(req: NextRequest) {
+  const auth = req.headers.get("authorization");
+  if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  return handleGenerate();
+}
+
+// Manual trigger calls POST
 export async function POST(req: NextRequest) {
-  // Simple API key check
   const auth = req.headers.get("x-iris-key");
   if (auth !== process.env.IRIS_API_KEY) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  return handleGenerate();
+}
+
+async function handleGenerate() {
 
   const service = getTodayService();
   const prompt = buildIrisPrompt(service);
