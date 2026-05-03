@@ -3,39 +3,62 @@ import { motion } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
 
 const fadeUp = (delay: number) => ({
-  initial: { opacity: 0, y: 40 },
+  initial: { opacity: 0, y: 30 },
   animate: { opacity: 1, y: 0 },
-  transition: { delay, duration: 0.7 },
+  transition: { delay, duration: 0.6 },
 });
 
 export default function HeroSection() {
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center px-5 sm:px-8" style={{ overflow: "hidden", maxWidth: "100vw" }}>
-      {/* BG orbs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-[300px] md:w-[500px] h-[300px] md:h-[500px] rounded-full animate-pulse-glow"
-          style={{ background: "radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%)", transform: "translate(-50%, -50%)" }} />
-        <div className="absolute top-2/3 right-0 w-[250px] md:w-[400px] h-[250px] md:h-[400px] rounded-full animate-float"
-          style={{ background: "radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%)", transform: "translate(30%, -50%)" }} />
-        <div className="absolute inset-0 opacity-[0.03]"
+    <section
+      id="hero"
+      className="relative min-h-screen flex items-center justify-center"
+      style={{ overflow: "clip" }}
+    >
+      {/* BG orbs — clipped inside section */}
+      <div className="absolute inset-0 pointer-events-none" style={{ overflow: "clip" }}>
+        <div className="absolute rounded-full animate-pulse-glow"
           style={{
-            backgroundImage: `linear-gradient(rgba(168,85,247,1) 1px, transparent 1px), linear-gradient(90deg, rgba(168,85,247,1) 1px, transparent 1px)`,
+            width: "60vw", height: "60vw", maxWidth: 500, maxHeight: 500,
+            top: "15%", left: "10%",
+            background: "radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%)",
+          }}
+        />
+        <div className="absolute rounded-full animate-float"
+          style={{
+            width: "50vw", height: "50vw", maxWidth: 400, maxHeight: 400,
+            bottom: "10%", right: "5%",
+            background: "radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(168,85,247,1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(168,85,247,1) 1px, transparent 1px)`,
             backgroundSize: "60px 60px",
-          }} />
+          }}
+        />
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto text-center w-full">
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-5 sm:px-8 text-center">
         {/* Badge */}
-        <motion.div {...fadeUp(0)} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 text-xs sm:text-sm text-purple-300 mb-6 md:mb-8">
+        <motion.div
+          {...fadeUp(0)}
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 text-xs sm:text-sm text-purple-300 mb-6"
+        >
           <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse flex-shrink-0" />
           AI-Powered Digital Agency
         </motion.div>
 
         {/* Headline */}
         <motion.h1
-          {...fadeUp(0.15)}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-5 md:mb-6 leading-[1.1]"
-          style={{ fontFamily: "var(--font-space)" }}
+          {...fadeUp(0.1)}
+          className="font-bold tracking-tight mb-5 leading-[1.15]"
+          style={{
+            fontFamily: "var(--font-space)",
+            fontSize: "clamp(2rem, 8vw, 4.5rem)",
+          }}
         >
           We Build Systems
           <br />
@@ -45,61 +68,67 @@ export default function HeroSection() {
 
         {/* Subtitle */}
         <motion.p
-          {...fadeUp(0.3)}
-          className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-8 md:mb-10 leading-relaxed px-2"
+          {...fadeUp(0.2)}
+          className="text-sm sm:text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed"
           style={{ color: "#8B8B9A" }}
         >
           AI web development, social media automation, Meta integrations &
-          smart workflows — everything your business needs to scale on autopilot.
+          smart workflows — everything your business needs to scale.
         </motion.p>
 
         {/* CTAs */}
         <motion.div
-          {...fadeUp(0.45)}
-          className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center justify-center"
+          {...fadeUp(0.3)}
+          className="flex flex-col sm:flex-row gap-3 items-center justify-center"
         >
           <a
             href="#contact"
-            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 sm:py-4 rounded-full font-semibold text-white bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 transition-all duration-300 glow-purple text-sm sm:text-base"
+            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full font-semibold text-white text-sm transition-all duration-300 glow-purple"
+            style={{ background: "linear-gradient(135deg, #7C3AED, #A855F7)" }}
           >
             Start Your Project
-            <ArrowRight size={17} className="group-hover:translate-x-1 transition-transform duration-200" />
+            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </a>
           <a
             href="#projects"
-            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 sm:py-4 rounded-full font-semibold border border-purple-500/30 hover:border-purple-400/60 text-purple-300 hover:text-white transition-all duration-300 text-sm sm:text-base"
+            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full font-semibold border border-purple-500/30 hover:border-purple-400/60 text-purple-300 hover:text-white transition-all duration-300 text-sm"
           >
-            <Play size={14} className="fill-current" />
+            <Play size={13} className="fill-current" />
             See Our Work
           </a>
         </motion.div>
 
         {/* Stats */}
         <motion.div
-          {...fadeUp(0.6)}
-          className="mt-14 md:mt-20 grid grid-cols-3 gap-4 md:gap-8 max-w-sm sm:max-w-lg mx-auto"
+          {...fadeUp(0.4)}
+          className="mt-12 md:mt-20 grid grid-cols-3 gap-3 max-w-xs sm:max-w-md mx-auto"
         >
           {[
-            { value: "50+", label: "Projects Delivered" },
-            { value: "99%", label: "Client Satisfaction" },
-            { value: "24/7", label: "Automation Running" },
+            { value: "50+", label: "Projects" },
+            { value: "99%", label: "Satisfaction" },
+            { value: "24/7", label: "Automation" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-gradient" style={{ fontFamily: "var(--font-space)" }}>
+              <div
+                className="font-bold text-gradient"
+                style={{ fontFamily: "var(--font-space)", fontSize: "clamp(1.25rem, 5vw, 2rem)" }}
+              >
                 {stat.value}
               </div>
-              <div className="text-[10px] sm:text-xs mt-1" style={{ color: "#8B8B9A" }}>{stat.label}</div>
+              <div className="text-[10px] sm:text-xs mt-1" style={{ color: "#8B8B9A" }}>
+                {stat.label}
+              </div>
             </div>
           ))}
         </motion.div>
       </div>
 
-      {/* Scroll indicator — hidden on mobile */}
+      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2"
+        className="hidden sm:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2"
       >
         <span className="text-xs" style={{ color: "#8B8B9A" }}>Scroll down</span>
         <motion.div
