@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   // Send email notification
   const { error: emailError } = await resend.emails.send({
     from: "FlowMinds Contact <onboarding@resend.dev>",
-    to: ["talibsoyteyyub@gmail.com"],
+    to: ["yourminds@flowminds.tech"],
     replyTo: email,
     subject: `New inquiry from ${name} — FlowMinds`,
     html: `
