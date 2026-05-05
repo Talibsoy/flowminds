@@ -26,7 +26,7 @@ export default function TechSection() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="tech" className="py-16 md:py-24 relative" style={{ overflow: "clip" }}>
+    <section id="tech" className="py-16 md:py-24 relative" style={{ overflow: "clip", background: "#0A0A0F", zIndex: 5, position: "relative" }}>
       <div className="w-full max-w-7xl mx-auto px-5 sm:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
