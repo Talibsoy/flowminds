@@ -4,11 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Logo from "@/components/Logo";
 
-const links = [
+const LINKS = [
   { label: "Services", href: "#services" },
   { label: "Projects", href: "#projects" },
-  { label: "Tech", href: "#tech" },
-  { label: "Contact", href: "#contact" },
+  { label: "Tech",     href: "#tech" },
+  { label: "Contact",  href: "#contact" },
 ];
 
 export default function Navbar() {
@@ -16,52 +16,55 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    const fn = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
   }, []);
 
   return (
     <motion.header
-      initial={{ y: -80, opacity: 0 }}
+      initial={{ y: -64, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "glass border-b border-purple-500/10 py-3" : "py-5"
-      }`}
+      transition={{ duration: 0.55, ease: "easeOut" }}
+      style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
+        transition: "all 0.4s ease",
+        ...(scrolled ? {
+          background: "rgba(10,10,15,0.88)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+          borderBottom: "1px solid rgba(124,58,237,0.12)",
+          padding: "12px 0",
+        } : { padding: "20px 0" }),
+      }}
     >
-      <nav className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between">
+      <nav style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         {/* Logo */}
-        <a href="#hero" className="flex items-center gap-2.5 group">
-          <Logo size={34} />
-          <span
-            className="text-lg font-bold tracking-tight"
-            style={{ fontFamily: "var(--font-space)" }}
-          >
+        <a href="#hero" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+          <Logo size={26} />
+          <span style={{ fontFamily: "var(--font-space)", fontSize: 18, fontWeight: 800, color: "#F8F8FF" }}>
             Flow<span className="text-gradient">Minds</span>
           </span>
         </a>
 
         {/* Desktop links */}
-        <ul className="hidden md:flex items-center gap-8">
-          {links.map((l) => (
+        <ul style={{ display: "none", alignItems: "center", gap: 32, listStyle: "none", margin: 0, padding: 0 }} className="nav-desktop">
+          {LINKS.map((l) => (
             <li key={l.href}>
-              <a
-                href={l.href}
-                className="text-sm text-muted hover:text-foreground transition-colors duration-200 relative group"
-                style={{ color: "#8B8B9A" }}
+              <a href={l.href} style={{ fontSize: 14, color: "#8B8B9A", textDecoration: "none", transition: "color 0.2s" }}
+                onMouseEnter={e => (e.currentTarget.style.color = "#F8F8FF")}
+                onMouseLeave={e => (e.currentTarget.style.color = "#8B8B9A")}
               >
                 {l.label}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-purple-500 to-cyan-400 group-hover:w-full transition-all duration-300" />
               </a>
             </li>
           ))}
         </ul>
 
         {/* CTA */}
-        <a
-          href="#contact"
-          className="hidden md:inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-purple-600 to-violet-600 text-white hover:from-purple-500 hover:to-violet-500 transition-all duration-300 glow-purple"
+        <a href="#contact"
+          className="glow-purple nav-cta"
+          style={{ display: "none", padding: "9px 22px", borderRadius: 999, fontSize: 14, fontWeight: 700, color: "#fff", background: "linear-gradient(135deg,#7C3AED,#A855F7)", textDecoration: "none" }}
         >
           Get Started
         </a>
@@ -69,8 +72,9 @@ export default function Navbar() {
         {/* Mobile toggle */}
         <button
           onClick={() => setOpen(!open)}
-          className="md:hidden text-white p-1"
+          style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 4, background: "none", border: "none", color: "#F8F8FF" }}
           aria-label="Toggle menu"
+          className="nav-toggle"
         >
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
@@ -83,27 +87,20 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass border-t border-purple-500/10"
+            style={{ background: "rgba(10,10,15,0.96)", borderTop: "1px solid rgba(124,58,237,0.12)" }}
           >
-            <ul className="px-6 py-4 flex flex-col gap-4">
-              {links.map((l) => (
+            <ul style={{ listStyle: "none", padding: "16px 24px 20px", margin: 0, display: "flex", flexDirection: "column", gap: 16 }}>
+              {LINKS.map((l) => (
                 <li key={l.href}>
-                  <a
-                    href={l.href}
-                    onClick={() => setOpen(false)}
-                    className="text-sm text-muted hover:text-white transition-colors"
-                    style={{ color: "#8B8B9A" }}
-                  >
+                  <a href={l.href} onClick={() => setOpen(false)}
+                    style={{ fontSize: 15, color: "#8B8B9A", textDecoration: "none" }}>
                     {l.label}
                   </a>
                 </li>
               ))}
               <li>
-                <a
-                  href="#contact"
-                  onClick={() => setOpen(false)}
-                  className="inline-block px-5 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-purple-600 to-violet-600 text-white"
-                >
+                <a href="#contact" onClick={() => setOpen(false)}
+                  style={{ display: "inline-block", padding: "10px 24px", borderRadius: 999, fontSize: 14, fontWeight: 700, color: "#fff", background: "linear-gradient(135deg,#7C3AED,#A855F7)", textDecoration: "none" }}>
                   Get Started
                 </a>
               </li>
@@ -111,6 +108,14 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <style>{`
+        @media (min-width: 768px) {
+          .nav-desktop { display: flex !important; }
+          .nav-cta     { display: inline-block !important; }
+          .nav-toggle  { display: none !important; }
+        }
+      `}</style>
     </motion.header>
   );
 }

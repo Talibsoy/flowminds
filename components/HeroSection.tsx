@@ -2,8 +2,8 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
 
-const fadeUp = (delay: number) => ({
-  initial: { opacity: 0, y: 30 },
+const fade = (delay: number) => ({
+  initial: { opacity: 0, y: 28 },
   animate: { opacity: 1, y: 0 },
   transition: { delay, duration: 0.6 },
 });
@@ -12,65 +12,61 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center"
-      style={{ overflow: "clip" }}
+      className="section-base"
+      style={{ minHeight: "100svh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}
     >
-      {/* BG orbs — clipped inside section */}
-      <div className="absolute inset-0 pointer-events-none" style={{ overflow: "clip" }}>
-        <div className="absolute rounded-full animate-pulse-glow"
-          style={{
-            width: "60vw", height: "60vw", maxWidth: 500, maxHeight: 500,
-            top: "15%", left: "10%",
-            background: "radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%)",
-          }}
-        />
-        <div className="absolute rounded-full animate-float"
-          style={{
-            width: "50vw", height: "50vw", maxWidth: 400, maxHeight: 400,
-            bottom: "10%", right: "5%",
-            background: "radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `linear-gradient(rgba(168,85,247,1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(168,85,247,1) 1px, transparent 1px)`,
-            backgroundSize: "60px 60px",
-          }}
-        />
+      {/* Background orbs */}
+      <div aria-hidden style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
+        <div style={{
+          position: "absolute", borderRadius: "50%",
+          width: "min(60vw, 480px)", height: "min(60vw, 480px)",
+          top: "15%", left: "8%",
+          background: "radial-gradient(circle, rgba(124,58,237,0.16) 0%, transparent 70%)",
+          animation: "pulse-glow 3s ease-in-out infinite",
+        }} />
+        <div style={{
+          position: "absolute", borderRadius: "50%",
+          width: "min(50vw, 380px)", height: "min(50vw, 380px)",
+          bottom: "10%", right: "5%",
+          background: "radial-gradient(circle, rgba(6,182,212,0.11) 0%, transparent 70%)",
+          animation: "float 6s ease-in-out infinite",
+        }} />
+        <div style={{
+          position: "absolute", inset: 0, opacity: 0.025,
+          backgroundImage: "linear-gradient(rgba(168,85,247,1) 1px, transparent 1px), linear-gradient(90deg, rgba(168,85,247,1) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+        }} />
       </div>
 
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-5 sm:px-8 text-center">
+      <div className="section-inner" style={{ position: "relative", zIndex: 1, textAlign: "center", paddingTop: 80, paddingBottom: 80 }}>
         {/* Badge */}
-        <motion.div
-          {...fadeUp(0)}
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 text-xs sm:text-sm text-purple-300 mb-6"
-        >
-          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse flex-shrink-0" />
+        <motion.div {...fade(0)} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px", borderRadius: 999, border: "1px solid rgba(168,85,247,0.3)", background: "rgba(168,85,247,0.08)", color: "#C084FC", fontSize: 13, marginBottom: 24 }}>
+          <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#22D3EE", flexShrink: 0, animation: "pulse-glow 2s ease-in-out infinite" }} />
           AI-Powered Digital Agency
         </motion.div>
 
         {/* Headline */}
         <motion.h1
-          {...fadeUp(0.1)}
-          className="font-bold tracking-tight mb-5 leading-[1.15]"
+          {...fade(0.1)}
           style={{
             fontFamily: "var(--font-space)",
-            fontSize: "clamp(2rem, 8vw, 4.5rem)",
+            fontSize: "clamp(2rem, 7vw, 4.5rem)",
+            fontWeight: 800,
+            lineHeight: 1.12,
+            color: "#F8F8FF",
+            marginBottom: 20,
+            letterSpacing: "-0.02em",
           }}
         >
-          We Build Systems
-          <br />
+          We Build Systems<br />
           That{" "}
           <span className="text-gradient animate-gradient">Work For You</span>
         </motion.h1>
 
         {/* Subtitle */}
         <motion.p
-          {...fadeUp(0.2)}
-          className="text-sm sm:text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed"
-          style={{ color: "#8B8B9A" }}
+          {...fade(0.2)}
+          style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.2rem)", color: "#8B8B9A", maxWidth: 540, margin: "0 auto 36px", lineHeight: 1.7 }}
         >
           AI web development, social media automation, Meta integrations &
           smart workflows — everything your business needs to scale.
@@ -78,65 +74,48 @@ export default function HeroSection() {
 
         {/* CTAs */}
         <motion.div
-          {...fadeUp(0.3)}
-          className="flex flex-col sm:flex-row gap-3 items-center justify-center"
+          {...fade(0.3)}
+          style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "center", justifyContent: "center" }}
         >
-          <a
-            href="#contact"
-            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full font-semibold text-white text-sm transition-all duration-300 glow-purple"
-            style={{ background: "linear-gradient(135deg, #7C3AED, #A855F7)" }}
-          >
-            Start Your Project
-            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </a>
-          <a
-            href="#projects"
-            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full font-semibold border border-purple-500/30 hover:border-purple-400/60 text-purple-300 hover:text-white transition-all duration-300 text-sm"
-          >
-            <Play size={13} className="fill-current" />
-            See Our Work
-          </a>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", width: "100%" }}>
+            <a href="#contact" className="glow-purple" style={{
+              display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
+              padding: "13px 28px", borderRadius: 999, fontWeight: 700, fontSize: 15,
+              color: "#fff", background: "linear-gradient(135deg, #7C3AED, #A855F7)",
+              textDecoration: "none", minWidth: 200,
+            }}>
+              Start Your Project <ArrowRight size={16} />
+            </a>
+            <a href="#projects" style={{
+              display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
+              padding: "13px 28px", borderRadius: 999, fontWeight: 700, fontSize: 15,
+              color: "#C084FC", border: "1px solid rgba(168,85,247,0.3)",
+              textDecoration: "none", minWidth: 160,
+            }}>
+              <Play size={14} style={{ fill: "currentColor" }} /> See Our Work
+            </a>
+          </div>
         </motion.div>
 
         {/* Stats */}
         <motion.div
-          {...fadeUp(0.4)}
-          className="mt-12 md:mt-20 grid grid-cols-3 gap-3 max-w-xs sm:max-w-md mx-auto"
+          {...fade(0.4)}
+          style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, maxWidth: 380, margin: "56px auto 0" }}
         >
           {[
             { value: "50+", label: "Projects" },
             { value: "99%", label: "Satisfaction" },
             { value: "24/7", label: "Automation" },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div
-                className="font-bold text-gradient"
-                style={{ fontFamily: "var(--font-space)", fontSize: "clamp(1.25rem, 5vw, 2rem)" }}
-              >
-                {stat.value}
+          ].map((s) => (
+            <div key={s.label} style={{ textAlign: "center" }}>
+              <div className="text-gradient" style={{ fontFamily: "var(--font-space)", fontSize: "clamp(1.4rem, 4vw, 2rem)", fontWeight: 800 }}>
+                {s.value}
               </div>
-              <div className="text-[10px] sm:text-xs mt-1" style={{ color: "#8B8B9A" }}>
-                {stat.label}
-              </div>
+              <div style={{ color: "#8B8B9A", fontSize: 11, marginTop: 4 }}>{s.label}</div>
             </div>
           ))}
         </motion.div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="hidden sm:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2"
-      >
-        <span className="text-xs" style={{ color: "#8B8B9A" }}>Scroll down</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-          className="w-px h-8 bg-gradient-to-b from-purple-500 to-transparent"
-        />
-      </motion.div>
     </section>
   );
 }
