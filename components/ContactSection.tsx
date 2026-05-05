@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Send, CheckCircle, AlertCircle, Mail, MessageSquare, User } from "lucide-react";
+import { Send, CheckCircle, AlertCircle, Mail, MessageSquare, User, Phone, MessageCircle } from "lucide-react";
 
 type Status = "idle" | "loading" | "success" | "error";
 

@@ -1,4 +1,4 @@
-import { X, ExternalLink } from "lucide-react";
+import { X, ExternalLink, Phone, MessageCircle } from "lucide-react";
 import Logo from "@/components/Logo";
 
 const links = {
@@ -22,8 +22,34 @@ export default function Footer() {
             <p className="text-sm leading-relaxed max-w-xs" style={{ color: "#8B8B9A" }}>
               AI-powered digital systems that automate, scale, and grow your business — while you sleep.
             </p>
-            <div className="flex items-center gap-3 mt-5">
-              {[{ label: "X", icon: X }, { label: "Link", icon: ExternalLink }].map(({ label, icon: Icon }) => (
+            {/* Contact info */}
+            <div className="flex flex-col gap-2 mt-5">
+              <a href="tel:+447828721748"
+                className="flex items-center gap-2 text-xs hover:text-white transition-colors duration-200"
+                style={{ color: "#8B8B9A" }}
+              >
+                <Phone size={13} />
+                +44 7828 721 7478
+              </a>
+              <a href="https://wa.me/447828721748"
+                target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-2 text-xs hover:text-green-400 transition-colors duration-200"
+                style={{ color: "#8B8B9A" }}
+              >
+                <MessageCircle size={13} />
+                WhatsApp
+              </a>
+              <a href="mailto:yourminds@flowminds.tech"
+                className="flex items-center gap-2 text-xs hover:text-white transition-colors duration-200"
+                style={{ color: "#8B8B9A" }}
+              >
+                <ExternalLink size={13} />
+                yourminds@flowminds.tech
+              </a>
+            </div>
+
+            <div className="flex items-center gap-3 mt-4">
+              {[{ label: "X", icon: X }].map(({ label, icon: Icon }) => (
                 <a key={label} href="#"
                   className="w-9 h-9 rounded-lg border flex items-center justify-center hover:text-white hover:border-purple-500/50 transition-all duration-200"
                   style={{ borderColor: "#1E1E2E", color: "#8B8B9A" }}
