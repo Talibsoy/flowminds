@@ -52,7 +52,8 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: "#0A0A0F", color: "#F8F8FF" }}>
+    <div className="min-h-screen" style={{ background: "#0A0A0F", color: "#F8F8FF", cursor: "default" }}>
+      <style>{`* { cursor: default !important; } input, textarea, select { cursor: text !important; } button, a { cursor: pointer !important; }`}</style>
       {/* Header */}
       <header
         className="sticky top-0 z-10 px-6 py-4 flex items-center justify-between"
