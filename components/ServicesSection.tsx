@@ -21,7 +21,7 @@ const services = [
 export default function ServicesSection() {
   return (
     <section id="services" className="py-16 md:py-24 relative" style={{ overflow: "clip" }}>
-      <div className="w-full max-w-7xl mx-auto px-5 sm:px-8">
+      <div className="w-full max-w-6xl mx-auto px-6 sm:px-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

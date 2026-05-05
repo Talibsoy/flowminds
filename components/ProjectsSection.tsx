@@ -66,7 +66,7 @@ export default function ProjectsSection() {
 
   return (
     <section id="projects" className="py-16 md:py-24 relative" style={{ overflow: "clip" }}>
-      <div className="w-full max-w-7xl mx-auto px-5 sm:px-8">
+      <div className="w-full max-w-6xl mx-auto px-6 sm:px-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -85,7 +85,7 @@ export default function ProjectsSection() {
           </p>
         </motion.div>
 
-        <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div ref={ref} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {projects.map((p, i) => {
             const Icon = p.icon;
             return (
@@ -94,7 +94,7 @@ export default function ProjectsSection() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: i * 0.08, duration: 0.5 }}
-                className="group relative rounded-2xl p-5 sm:p-6 flex flex-col gap-4 border-gradient"
+                className="group relative rounded-2xl p-6 sm:p-7 flex flex-col gap-4 border-gradient"
                 style={{ background: "#13131A" }}
               >
                 {/* Hover glow */}
@@ -129,7 +129,16 @@ export default function ProjectsSection() {
                 </div>
 
                 {/* Description */}
-                <p className="text-xs sm:text-sm leading-relaxed flex-1" style={{ color: "#8B8B9A" }}>
+                <p
+                  className="text-xs sm:text-sm leading-relaxed flex-1"
+                  style={{
+                    color: "#8B8B9A",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 4,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                  }}
+                >
                   {p.desc}
                 </p>
 
