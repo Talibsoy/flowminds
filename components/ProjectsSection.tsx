@@ -117,9 +117,16 @@ export default function ProjectsSection() {
                         {p.title}
                       </h3>
                       {p.url && (
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5" style={{ color: "#8B8B9A" }}>
-                          {p.url}
-                        </span>
+                        <a
+                          href={`https://${p.url}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-[10px] px-2 py-0.5 rounded-full hover:opacity-80 transition-opacity"
+                          style={{ background: `${p.color}15`, color: p.color, border: `1px solid ${p.color}35`, textDecoration: "none" }}
+                        >
+                          ↗ {p.url}
+                        </a>
                       )}
                     </div>
                   </div>
@@ -153,10 +160,22 @@ export default function ProjectsSection() {
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center gap-1 text-xs font-medium group-hover:text-white transition-colors duration-200" style={{ color: "#555566" }}>
-                  View project
-                  <ArrowUpRight size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
-                </div>
+                {p.url ? (
+                  <a
+                    href={`https://${p.url}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-xs font-medium group-hover:text-white transition-colors duration-200"
+                    style={{ color: "#555566", textDecoration: "none" }}
+                  >
+                    Visit {p.url}
+                    <ArrowUpRight size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                  </a>
+                ) : (
+                  <div className="flex items-center gap-1 text-xs font-medium" style={{ color: "#555566" }}>
+                    Coming soon
+                  </div>
+                )}
               </motion.div>
             );
           })}
