@@ -172,9 +172,14 @@ export default function ProjectsSection() {
                     <ArrowUpRight size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
                   </a>
                 ) : (
-                  <div className="flex items-center gap-1 text-xs font-medium" style={{ color: "#555566" }}>
-                    Coming soon
-                  </div>
+                  <a
+                    href="#contact"
+                    className="flex items-center gap-1 text-xs font-medium transition-colors duration-200"
+                    style={{ color: "#A855F7", textDecoration: "none" }}
+                  >
+                    Request Demo
+                    <ArrowUpRight size={12} />
+                  </a>
                 )}
               </motion.div>
             );
