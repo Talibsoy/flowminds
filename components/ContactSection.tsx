@@ -31,7 +31,7 @@ export default function ContactSection() {
   const focusOut = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => (e.target.style.borderColor = "#1E1E2E");
 
   return (
-    <section id="contact" className="py-16 md:py-24 relative" style={{ overflow: "clip" }}>
+    <section id="contact" className="py-16 md:py-24 relative" style={{ overflow: "clip", background: "#0A0A0F" }}>
       <div
         className="absolute bottom-0 left-1/2 -translate-x-1/2 pointer-events-none"
         style={{ width: "80vw", height: "40vw", background: "radial-gradient(ellipse, rgba(124,58,237,0.1), transparent 70%)" }}
@@ -67,7 +67,7 @@ export default function ContactSection() {
             <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-400" />
             <input type="text" placeholder="Your Name" required value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full pl-10 pr-4 py-3 rounded-xl text-sm outline-none transition-all duration-300"
+              className="w-full pl-11 pr-4 py-3 rounded-xl text-sm outline-none transition-all duration-300"
               style={inputStyle} onFocus={focusIn} onBlur={focusOut} />
           </div>
 
@@ -75,7 +75,7 @@ export default function ContactSection() {
             <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-400" />
             <input type="email" placeholder="your@email.com" required value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full pl-10 pr-4 py-3 rounded-xl text-sm outline-none transition-all duration-300"
+              className="w-full pl-11 pr-4 py-3 rounded-xl text-sm outline-none transition-all duration-300"
               style={inputStyle} onFocus={focusIn} onBlur={focusOut} />
           </div>
 
@@ -83,7 +83,7 @@ export default function ContactSection() {
             <MessageSquare size={15} className="absolute left-3.5 top-3.5 text-purple-400" />
             <textarea placeholder="Tell us about your project..." required rows={4} value={form.message}
               onChange={(e) => setForm({ ...form, message: e.target.value })}
-              className="w-full pl-10 pr-4 py-3 rounded-xl text-sm outline-none transition-all duration-300 resize-none"
+              className="w-full pl-11 pr-4 py-3 rounded-xl text-sm outline-none transition-all duration-300 resize-none"
               style={inputStyle} onFocus={focusIn} onBlur={focusOut} />
           </div>
 
