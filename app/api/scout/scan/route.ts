@@ -77,8 +77,6 @@ async function runScan() {
 
       // Send to Telegram only if score >= 7
       if (scored.score >= 7) {
-        const preview = scored.proposal.substring(0, 220) + "...";
-
         const msg = `<b>SCOUT — New Lead Found</b>
 <b>━━━━━━━━━━━━━━━━━</b>
 
@@ -86,8 +84,8 @@ async function runScan() {
 <b>Budget:</b> ${scored.budget}
 <b>Score:</b> ${scored.score}/10
 
-<b>Proposal Preview:</b>
-<i>${preview}</i>`;
+<b>Copy this proposal:</b>
+<code>${scored.proposal}</code>`;
 
         const keyboard = {
           inline_keyboard: [
