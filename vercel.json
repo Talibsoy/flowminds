@@ -3,6 +3,10 @@
     {
       "path": "/api/iris/generate",
       "schedule": "0 7 * * *"
+    },
+    {
+      "path": "/api/scout/scan",
+      "schedule": "0 */2 * * *"
     }
   ]
 }
