@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabase } from "@/lib/supabase";
+import { getDb } from "@/lib/firebase";
 import { cookies } from "next/headers";
 
 export async function PATCH(req: NextRequest) {
@@ -16,12 +16,11 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  const supabase = getSupabase();
-  const { error } = await supabase.from("inquiries").update({ status }).eq("id", id);
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  try {
+    const db = getDb();
+    await db.collection("inquiries").doc(id).update({ status });
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    return NextResponse.json({ error: String(err) }, { status: 500 });
   }
-
-  return NextResponse.json({ success: true });
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
-import { getSupabase } from "@/lib/supabase";
+import { getDb } from "@/lib/firebase";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -11,12 +11,51 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
   }
 
-  // Save to Supabase (graceful if not configured)
+  let inquiryId: string | null = null;
+
   try {
-    const supabase = getSupabase();
-    await supabase.from("inquiries").insert({ name, email, message, status: "new" });
+    const db = getDb();
+    const docRef = await db.collection("inquiries").add({
+      name,
+      email,
+      message,
+      status: "new",
+      created_at: new Date().toISOString(),
+    });
+    inquiryId = docRef.id;
   } catch (err) {
-    console.error("Supabase not configured or insert failed:", err);
+    console.error("Firestore insert failed:", err);
+  }
+
+  // ARIA — Telegram-a bildiriş göndər
+  if (inquiryId) {
+    const token = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
+    if (token && chatId) {
+      const msg = `💬 <b>ARIA — Yeni Müştəri Sorğusu</b>
+<b>━━━━━━━━━━━━━━━━━</b>
+<b>Ad:</b> ${name}
+<b>Email:</b> ${email}
+<b>Mesaj:</b>
+<i>${message.substring(0, 300)}${message.length > 300 ? "..." : ""}</i>`;
+
+      const keyboard = {
+        inline_keyboard: [
+          [{ text: "🤖 AI ilə cavabla", callback_data: `aria_reply_${inquiryId}` }],
+        ],
+      };
+
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: msg,
+          parse_mode: "HTML",
+          reply_markup: keyboard,
+        }),
+      });
+    }
   }
 
   // Send email notification

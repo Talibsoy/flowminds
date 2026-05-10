@@ -73,20 +73,24 @@ ${content.instagram.hashtags}
           { text: "✅ Post All", callback_data: `iris_post_${contentKey}` },
           { text: "🔄 Regenerate", callback_data: "iris_regenerate" },
         ],
-        [{ text: "❌ Skip Today", callback_data: "iris_skip" }],
+        [
+          { text: "📷 Şəkil yüklə", url: `${process.env.NEXT_PUBLIC_URL}/admin/iris-image?key=${contentKey}` },
+          { text: "❌ Skip Today", callback_data: "iris_skip" },
+        ],
       ],
     };
 
     await sendTelegramMessage(preview, keyboard);
 
-    // Save content to Supabase for webhook retrieval
-    const { getSupabase } = await import("@/lib/supabase");
-    const supabase = getSupabase();
-    await supabase.from("iris_queue").insert({
+    const { getDb } = await import("@/lib/firebase");
+    const db = getDb();
+    await db.collection("iris_queue").add({
       key: contentKey,
       service,
       content: JSON.stringify(content),
       created_at: new Date().toISOString(),
+      posted: false,
+      image_url: null,
     });
 
     return NextResponse.json({ success: true, service, contentKey });

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchUpworkLeads, qualifyAndPropose } from "@/lib/scout-rss";
-import { getSupabase } from "@/lib/supabase";
+import { getDb } from "@/lib/firebase";
 
 async function sendTelegram(text: string, keyboard?: object): Promise<boolean> {
   const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
 }
 
 async function runScan() {
-  const supabase = getSupabase();
+  const db = getDb();
   let found = 0;
   let sent = 0;
 
@@ -51,21 +51,16 @@ async function runScan() {
 
     for (const lead of leads) {
       // Skip already seen
-      const { data: existing } = await supabase
-        .from("leads")
-        .select("id")
-        .eq("url", lead.url)
-        .single();
-
-      if (existing) continue;
+      const existing = await db.collection("leads").where("url", "==", lead.url).limit(1).get();
+      if (!existing.empty) continue;
 
       const scored = await qualifyAndPropose(lead);
       if (!scored) continue;
 
       found++;
 
-      // Save to Supabase regardless of score
-      await supabase.from("leads").insert({
+      // Save to Firestore regardless of score
+      const docRef = await db.collection("leads").add({
         title: scored.title,
         url: scored.url,
         budget: scored.budget,
@@ -73,6 +68,7 @@ async function runScan() {
         score: scored.score,
         proposal: scored.proposal,
         status: scored.score >= 7 ? "pending" : "low_score",
+        created_at: new Date().toISOString(),
       });
 
       // Send to Telegram only if score >= 7
@@ -91,7 +87,7 @@ async function runScan() {
           inline_keyboard: [
             [
               { text: "Apply on Upwork", url: scored.url },
-              { text: "Skip", callback_data: `scout_skip_${scored.id}` },
+              { text: "Skip", callback_data: `scout_skip_${docRef.id}` },
             ],
           ],
         };

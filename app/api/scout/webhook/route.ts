@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabase } from "@/lib/supabase";
+import { getDb } from "@/lib/firebase";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -18,8 +18,8 @@ export async function POST(req: NextRequest) {
 
   if (data.startsWith("scout_skip_")) {
     const leadId = data.replace("scout_skip_", "");
-    const supabase = getSupabase();
-    await supabase.from("leads").update({ status: "rejected" }).eq("id", leadId);
+    const db = getDb();
+    await db.collection("leads").doc(leadId).update({ status: "rejected" });
 
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",

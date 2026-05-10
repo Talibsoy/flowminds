@@ -1,10 +1,11 @@
-export async function postToInstagram(caption: string, hashtags: string): Promise<{ success: boolean; id?: string; error?: string }> {
+export async function postToInstagram(caption: string, hashtags: string, imageUrl?: string): Promise<{ success: boolean; id?: string; error?: string }> {
   const token = process.env.META_ACCESS_TOKEN;
   const userId = process.env.META_IG_USER_ID;
 
   if (!token || !userId) return { success: false, error: "Instagram credentials missing" };
 
   const fullCaption = `${caption}\n\n${hashtags}`;
+  const finalImageUrl = imageUrl || "https://flowminds.tech/og-iris.jpg";
 
   try {
     // Step 1: Create media container
@@ -15,7 +16,7 @@ export async function postToInstagram(caption: string, hashtags: string): Promis
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           caption: fullCaption,
-          image_url: "https://flowminds.tech/og-iris.jpg",
+          image_url: finalImageUrl,
           access_token: token,
         }),
       }

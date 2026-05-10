@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut, Mail, Clock, CheckCircle, MessageCircle, RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
 import Logo from "@/components/Logo";
-import type { Inquiry } from "@/lib/supabase";
+import type { Inquiry } from "@/lib/firebase";
 
 const STATUS_CONFIG = {
   new: { label: "New", color: "#A855F7", bg: "rgba(168,85,247,0.15)", border: "rgba(168,85,247,0.3)" },
