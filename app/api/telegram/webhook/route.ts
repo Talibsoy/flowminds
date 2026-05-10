@@ -145,44 +145,31 @@ export async function POST(req: NextRequest) {
 
     // Upwork URL gəldi → ARIA proposal yaz
     if (text.includes("upwork.com/jobs/") || text.includes("upwork.com/freelance-jobs/")) {
-      const url = text.trim();
-      const title = titleFromUrl(url);
+      const jobUrl = text.trim();
+      const title = titleFromUrl(jobUrl);
 
       await sendMessage(chatId, "✍️ ARIA proposal yazır...");
 
-      const proposal = await generateProposal(title, "No description provided — generate a strong general proposal based on the job title.", "Not specified");
+      try {
+        const proposal = await generateProposal(title, "No description — write a strong general proposal based on the job title.", "Not specified");
 
-      await sendMessage(
-        chatId,
-        `🤖 <b>ARIA — Upwork Proposal</b>
-<b>━━━━━━━━━━━━━━━━━</b>
-📌 <b>${title}</b>
-<b>━━━━━━━━━━━━━━━━━</b>
+        await sendMessage(
+          chatId,
+          `🤖 ARIA — Upwork Proposal\n━━━━━━━━━━━━━━━━━\n${title}\n━━━━━━━━━━━━━━━━━\n\n${proposal}\n\n━━━━━━━━━━━━━━━━━\nJob tesvirini gondersen daha deqiq proposal yazaram.`,
+          { inline_keyboard: [[{ text: "Upwork-da ac", url: jobUrl }]] }
+        );
 
-<code>${proposal}</code>
-
-<b>━━━━━━━━━━━━━━━━━</b>
-💡 Kopyala və Upwork-da yapışdır.
-📝 Job təsvirini göndərsən daha dəqiq proposal yazaram.`,
-        {
-          inline_keyboard: [[
-            { text: "🔗 Upwork-da aç", url },
-          ]],
-        }
-      );
-
-      const db = getDb();
-      await db.collection("leads").add({
-        title,
-        url,
-        budget: "Not specified",
-        description: "",
-        score: 8,
-        proposal,
-        status: "pending",
-        source: "telegram_manual",
-        created_at: new Date().toISOString(),
-      });
+        try {
+          const db = getDb();
+          await db.collection("leads").add({
+            title, url: jobUrl, budget: "Not specified", description: "",
+            score: 8, proposal, status: "pending",
+            source: "telegram_manual", created_at: new Date().toISOString(),
+          });
+        } catch { /* Firestore xətası proposal-ı bloklamasın */ }
+      } catch (err) {
+        await sendMessage(chatId, `Xeta: ${String(err).substring(0, 200)}`);
+      }
 
       return NextResponse.json({ ok: true });
     }
@@ -191,18 +178,12 @@ export async function POST(req: NextRequest) {
     if (text.length > 50 && !text.startsWith("/")) {
       await sendMessage(chatId, "✍️ ARIA proposal yazır...");
 
-      const proposal = await generateProposal("Upwork Job", text, "Not specified");
-
-      await sendMessage(
-        chatId,
-        `🤖 <b>ARIA — Proposal</b>
-<b>━━━━━━━━━━━━━━━━━</b>
-
-<code>${proposal}</code>
-
-<b>━━━━━━━━━━━━━━━━━</b>
-💡 Kopyala və yapışdır.`
-      );
+      try {
+        const proposal = await generateProposal("Upwork Job", text, "Not specified");
+        await sendMessage(chatId, `🤖 ARIA — Proposal\n━━━━━━━━━━━━━━━━━\n\n${proposal}\n\n━━━━━━━━━━━━━━━━━\nKopyala ve yapishdir.`);
+      } catch (err) {
+        await sendMessage(chatId, `Xeta: ${String(err).substring(0, 200)}`);
+      }
 
       return NextResponse.json({ ok: true });
     }
