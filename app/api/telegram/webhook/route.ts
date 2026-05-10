@@ -31,41 +31,14 @@ async function answerCallback(callbackId: string) {
   });
 }
 
-// Upwork URL-dən job məlumatını çək
-async function fetchUpworkJob(url: string): Promise<{ title: string; description: string; budget: string } | null> {
+// Upwork URL slug-dan başlıq çıxar
+function titleFromUrl(url: string): string {
   try {
-    const token = process.env.APIFY_API_KEY!;
-    const res = await fetch(
-      `https://api.apify.com/v2/acts/flash_mage~upwork/run-sync-get-dataset-items?token=${token}&memory=256&timeout=60`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url, maxResults: 1 }),
-      }
-    );
-    if (!res.ok) return null;
-    const items = await res.json();
-    if (!Array.isArray(items) || items.length === 0) return null;
-
-    const job = items[0] as Record<string, unknown>;
-    const opening = (job.data as Record<string, unknown>)?.opening as Record<string, unknown> | undefined;
-    const info = opening?.info as Record<string, unknown> | undefined;
-
-    const title = (job.title as string) || "Upwork Job";
-    const description = ((opening?.description as string) || "").substring(0, 600);
-
-    const jobType = (info?.type as string) || "";
-    const hourlyMin = (info?.hourlyBudgetMin as number) || 0;
-    const hourlyMax = (info?.hourlyBudgetMax as number) || 0;
-    const fixedAmount = (info?.amount as number) || 0;
-
-    let budget = "Not specified";
-    if (jobType === "HOURLY" && hourlyMin > 0) budget = `$${hourlyMin}-$${hourlyMax}/hr`;
-    else if (fixedAmount > 0) budget = `$${fixedAmount} (fixed)`;
-
-    return { title, description, budget };
+    const match = url.match(/\/jobs\/([^_~?/]+)/);
+    if (!match) return "Upwork Job";
+    return match[1].replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
   } catch {
-    return null;
+    return "Upwork Job";
   }
 }
 
@@ -172,45 +145,38 @@ export async function POST(req: NextRequest) {
 
     // Upwork URL gəldi → ARIA proposal yaz
     if (text.includes("upwork.com/jobs/") || text.includes("upwork.com/freelance-jobs/")) {
-      await sendMessage(chatId, "🔍 Job məlumatları çəkilir, ARIA proposal yazır...");
+      const url = text.trim();
+      const title = titleFromUrl(url);
 
-      const job = await fetchUpworkJob(text.trim());
+      await sendMessage(chatId, "✍️ ARIA proposal yazır...");
 
-      if (!job) {
-        // URL-dən çəkə bilmədik, sadəcə proposal istə
-        await sendMessage(chatId, "⚠️ Job məlumatı tapılmadı. Job təsvirini birbaşa göndər.");
-        return NextResponse.json({ ok: true });
-      }
-
-      const proposal = await generateProposal(job.title, job.description, job.budget);
+      const proposal = await generateProposal(title, "No description provided — generate a strong general proposal based on the job title.", "Not specified");
 
       await sendMessage(
         chatId,
         `🤖 <b>ARIA — Upwork Proposal</b>
 <b>━━━━━━━━━━━━━━━━━</b>
-📌 <b>${job.title}</b>
-💰 ${job.budget}
+📌 <b>${title}</b>
 <b>━━━━━━━━━━━━━━━━━</b>
 
 <code>${proposal}</code>
 
 <b>━━━━━━━━━━━━━━━━━</b>
-💡 Kopyala və Upwork-da yapışdır.`,
+💡 Kopyala və Upwork-da yapışdır.
+📝 Job təsvirini göndərsən daha dəqiq proposal yazaram.`,
         {
           inline_keyboard: [[
-            { text: "🔗 Upwork-da aç", url: text.trim() },
-            { text: "🔄 Yenidən yaz", callback_data: `repropo_${Buffer.from(text.trim()).toString("base64").substring(0, 40)}` },
+            { text: "🔗 Upwork-da aç", url },
           ]],
         }
       );
 
-      // Firestore-a saxla
       const db = getDb();
       await db.collection("leads").add({
-        title: job.title,
-        url: text.trim(),
-        budget: job.budget,
-        description: job.description,
+        title,
+        url,
+        budget: "Not specified",
+        description: "",
         score: 8,
         proposal,
         status: "pending",
