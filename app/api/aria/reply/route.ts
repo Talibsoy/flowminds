@@ -40,7 +40,7 @@ Write a personalized email reply (100-150 words) that:
 Do NOT start with "I am ARIA" or "I am an AI". Sound like a real human team member.
 Return ONLY the email body text, no subject line, no extra formatting.`;
 
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const result = await model.generateContent(prompt);
   const reply = result.response.text();
 
