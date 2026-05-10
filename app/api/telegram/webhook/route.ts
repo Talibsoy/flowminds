@@ -51,7 +51,7 @@ Portfolio: natoure.az, promptazmusic.com`;
 
 // ARIA ilə Upwork proposal yarat
 async function generateProposal(title: string, description: string, budget: string): Promise<string> {
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
   const result = await model.generateContent(
     `You are ARIA, FlowMinds' AI sales agent. Write a winning Upwork cover letter.
 
