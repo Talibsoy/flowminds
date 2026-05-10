@@ -35,6 +35,16 @@ async function buildReport(): Promise<NextResponse> {
   const leadsTotal = leadsData.length;
   const leadsHighScore = leadsData.filter((l) => l.score >= 7).length;
   const leadsPending = leadsData.filter((l) => l.status === "pending").length;
+  const leadsSent = leadsData.filter((l) => l.status === "sent").length;
+
+  // Won/Lost — ümumi
+  const allLeadsSnap = await db.collection("leads").get();
+  const allLeads = allLeadsSnap.docs.map((d) => d.data());
+  const leadsWon = allLeads.filter((l) => l.status === "won").length;
+  const leadsLost = allLeads.filter((l) => l.status === "lost").length;
+  const winRate = leadsWon + leadsLost > 0
+    ? Math.round((leadsWon / (leadsWon + leadsLost)) * 100)
+    : 0;
 
   // ARIA stats — cavablanmayan inquiries
   const inquiriesSnap = await db.collection("inquiries").get();
@@ -60,7 +70,10 @@ async function buildReport(): Promise<NextResponse> {
 🎯 <b>SCOUT — Lead Agenti</b>
 • Bu həftə tapılan: <b>${leadsTotal}</b>
 • 7+ skor alan: <b>${leadsHighScore}</b>
+• Proposal göndərilən: <b>${leadsSent}</b>
 • Gözlənilən (pending): <b>${leadsPending}</b>
+• 🏆 Qazanılan: <b>${leadsWon}</b> | ❌ İtən: <b>${leadsLost}</b>
+• Win rate: <b>${winRate}%</b>
 
 💬 <b>ARIA — Müştəri Sorğuları</b>
 • Cavablanmayan: <b>${inquiriesNew}</b>

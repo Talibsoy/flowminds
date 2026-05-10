@@ -138,6 +138,98 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true });
     }
 
+    // ── /sent [url] — proposal göndərildi, status yenilə ──────
+    if (text.startsWith("/sent")) {
+      const url = text.replace("/sent", "").trim();
+      if (!url) {
+        await sendMessage(chatId, "İstifade: /sent [upwork_url]");
+        return NextResponse.json({ ok: true });
+      }
+      try {
+        const db = getDb();
+        const snap = await db.collection("leads").where("url", "==", url).limit(1).get();
+        if (snap.empty) {
+          await sendMessage(chatId, "⚠️ Bu URL-ə aid lead tapılmadı.");
+          return NextResponse.json({ ok: true });
+        }
+        await snap.docs[0].ref.update({ status: "sent", sent_at: new Date().toISOString() });
+        const title = snap.docs[0].data().title;
+        await sendMessage(chatId, `✅ <b>${title}</b>\nStatus: <b>Göndərildi</b> — müştəri cavabını gözlə.\n\nMüştəri cavab verəndə mesajını bura at, ARIA follow-up yazar.`);
+      } catch (err) {
+        await sendMessage(chatId, `Xeta: ${String(err).substring(0, 150)}`);
+      }
+      return NextResponse.json({ ok: true });
+    }
+
+    // ── /won [url] — müqavilə qazanıldı ──────────────────────
+    if (text.startsWith("/won")) {
+      const url = text.replace("/won", "").trim();
+      try {
+        const db = getDb();
+        const snap = await db.collection("leads").where("url", "==", url).limit(1).get();
+        if (!snap.empty) {
+          await snap.docs[0].ref.update({ status: "won", won_at: new Date().toISOString() });
+          const title = snap.docs[0].data().title;
+          await sendMessage(chatId, `🏆 <b>Təbrik!</b>\n<b>${title}</b>\nMüqavilə qazanıldı! DOE hesabatına əlavə edildi.`);
+        } else {
+          await sendMessage(chatId, "⚠️ Lead tapılmadı. URL düzgündür?");
+        }
+      } catch (err) {
+        await sendMessage(chatId, `Xeta: ${String(err).substring(0, 150)}`);
+      }
+      return NextResponse.json({ ok: true });
+    }
+
+    // ── /lost [url] — lead itdi ───────────────────────────────
+    if (text.startsWith("/lost")) {
+      const url = text.replace("/lost", "").trim();
+      try {
+        const db = getDb();
+        const snap = await db.collection("leads").where("url", "==", url).limit(1).get();
+        if (!snap.empty) {
+          await snap.docs[0].ref.update({ status: "lost", lost_at: new Date().toISOString() });
+          const title = snap.docs[0].data().title;
+          await sendMessage(chatId, `📝 <b>${title}</b> — Lost kimi qeyd edildi.`);
+        } else {
+          await sendMessage(chatId, "⚠️ Lead tapılmadı.");
+        }
+      } catch (err) {
+        await sendMessage(chatId, `Xeta: ${String(err).substring(0, 150)}`);
+      }
+      return NextResponse.json({ ok: true });
+    }
+
+    // ── /leads — aktiv lead-ləri göstər ──────────────────────
+    if (text === "/leads") {
+      try {
+        const db = getDb();
+        const snap = await db.collection("leads")
+          .where("status", "in", ["pending", "sent", "replied", "meeting"])
+          .orderBy("created_at", "desc")
+          .limit(10)
+          .get();
+
+        if (snap.empty) {
+          await sendMessage(chatId, "Aktiv lead yoxdur.");
+          return NextResponse.json({ ok: true });
+        }
+
+        const statusEmoji: Record<string, string> = {
+          pending: "⏳", sent: "📤", replied: "💬", meeting: "📅", won: "🏆", lost: "❌"
+        };
+
+        const lines = snap.docs.map((d) => {
+          const l = d.data();
+          return `${statusEmoji[l.status] ?? "•"} <b>${l.title}</b>\nStatus: ${l.status} | Score: ${l.score}/10`;
+        }).join("\n\n");
+
+        await sendMessage(chatId, `📋 <b>Aktiv Lead-lər</b>\n━━━━━━━━━━━━━━━━━\n\n${lines}`);
+      } catch (err) {
+        await sendMessage(chatId, `Xeta: ${String(err).substring(0, 150)}`);
+      }
+      return NextResponse.json({ ok: true });
+    }
+
     // Upwork URL gəldi → ARIA proposal yaz
     if (text.includes("upwork.com/jobs/") || text.includes("upwork.com/freelance-jobs/")) {
       const jobUrl = text.trim();
@@ -169,13 +261,34 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true });
     }
 
-    // Sərbəst mətn gəldi → ARIA proposal yaz (job təsviri kimi qəbul et)
-    if (text.length > 50 && !text.startsWith("/")) {
-      await sendMessage(chatId, "✍️ ARIA proposal yazır...");
+    // ── Müştəri mesajı (follow-up) ───────────────────────────
+    // Format: müştəri mesajını sadəcə at, ARIA follow-up yazır
+    if (text.length > 30 && !text.startsWith("/")) {
+      await sendMessage(chatId, "💬 ARIA follow-up yazır...");
 
       try {
-        const proposal = await generateProposal("Upwork Job", text, "Not specified");
-        await sendMessage(chatId, `🤖 ARIA — Proposal\n━━━━━━━━━━━━━━━━━\n\n${proposal}\n\n━━━━━━━━━━━━━━━━━\nKopyala ve yapishdir.`);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const result = await model.generateContent(
+          `You are ARIA, FlowMinds' AI sales agent. Write a professional follow-up reply to this client message on Upwork.
+
+${FLOWMINDS_CONTEXT}
+
+Client message: "${text}"
+
+Write a 80-120 word reply that:
+- Directly addresses their message
+- Moves the conversation forward (toward a call or project start)
+- Sounds natural and confident, not salesy
+- If they ask about price/timeline, give a range and suggest a quick call to clarify
+
+Return ONLY the reply text.`
+        );
+        const reply = result.response.text();
+
+        await sendMessage(
+          chatId,
+          `💬 <b>ARIA — Follow-up Cavabı</b>\n━━━━━━━━━━━━━━━━━\n\n${reply}\n\n━━━━━━━━━━━━━━━━━\nKopyala və Upwork-da göndər.`
+        );
       } catch (err) {
         await sendMessage(chatId, `Xeta: ${String(err).substring(0, 200)}`);
       }
@@ -189,11 +302,13 @@ export async function POST(req: NextRequest) {
         chatId,
         `👋 <b>FlowMinds AI Bot</b>
 
-<b>Nə edə bilərəm:</b>
-• Upwork URL göndər → ARIA proposal yazar
-• Job təsvirini yazıb göndər → proposal alarsan
-• SCOUT avtomatik hər gün lead tapır
-• ARIA müştəri sorğularına cavab verir
+<b>Komandalar:</b>
+• Upwork URL → proposal yazar
+• Müştəri mesajını at → follow-up yazar
+• /sent [url] → proposal göndərildi
+• /won [url] → müqavilə qazanıldı 🏆
+• /lost [url] → lead itdi
+• /leads → aktiv leadlər
 
 <b>Agentlər:</b>
 🌈 IRIS — Sosial media
