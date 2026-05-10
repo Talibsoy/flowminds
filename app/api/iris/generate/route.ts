@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { buildIrisPrompt, getTodayService } from "@/lib/iris-content";
 import { sendTelegramMessage } from "@/lib/iris-poster";
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 // Vercel Cron calls GET
 export async function GET(req: NextRequest) {
@@ -29,15 +29,11 @@ async function handleGenerate() {
   const prompt = buildIrisPrompt(service);
 
   try {
-    const message = await anthropic.messages.create({
-      model: "claude-sonnet-4-6",
-      max_tokens: 2000,
-      messages: [{ role: "user", content: prompt }],
-    });
-
-    const raw = message.content[0].type === "text" ? message.content[0].text : "";
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const response = await model.generateContent(prompt);
+    const raw = response.response.text();
     const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error("No JSON found in Claude response");
+    if (!jsonMatch) throw new Error("No JSON found in Gemini response");
 
     const content = JSON.parse(jsonMatch[0]);
 

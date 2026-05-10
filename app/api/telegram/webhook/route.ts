@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getDb } from "@/lib/firebase";
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 const TOKEN = () => process.env.TELEGRAM_BOT_TOKEN!;
 const ALLOWED_CHAT = () => process.env.TELEGRAM_CHAT_ID!;
@@ -51,12 +51,9 @@ Portfolio: natoure.az, promptazmusic.com`;
 
 // ARIA ilə Upwork proposal yarat
 async function generateProposal(title: string, description: string, budget: string): Promise<string> {
-  const msg = await anthropic.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 600,
-    messages: [{
-      role: "user",
-      content: `You are ARIA, FlowMinds' AI sales agent. Write a winning Upwork cover letter.
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  const result = await model.generateContent(
+    `You are ARIA, FlowMinds' AI sales agent. Write a winning Upwork cover letter.
 
 ${FLOWMINDS_CONTEXT}
 
@@ -73,11 +70,9 @@ Write a 150-200 word cover letter that:
 - Ends with clear CTA
 
 Do NOT start with "I" or "We are FlowMinds". Sound human and confident.
-Return ONLY the cover letter text.`,
-    }],
-  });
-
-  return msg.content[0].type === "text" ? msg.content[0].text : "";
+Return ONLY the cover letter text.`
+  );
+  return result.response.text();
 }
 
 export async function POST(req: NextRequest) {

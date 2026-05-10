@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getDb } from "@/lib/firebase";
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function POST(req: NextRequest) {
   const auth = req.headers.get("x-aria-key");
@@ -40,13 +40,9 @@ Write a personalized email reply (100-150 words) that:
 Do NOT start with "I am ARIA" or "I am an AI". Sound like a real human team member.
 Return ONLY the email body text, no subject line, no extra formatting.`;
 
-  const msg = await anthropic.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 500,
-    messages: [{ role: "user", content: prompt }],
-  });
-
-  const reply = msg.content[0].type === "text" ? msg.content[0].text : "";
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  const result = await model.generateContent(prompt);
+  const reply = result.response.text();
 
   const token = process.env.TELEGRAM_BOT_TOKEN!;
   const chatId = process.env.TELEGRAM_CHAT_ID!;

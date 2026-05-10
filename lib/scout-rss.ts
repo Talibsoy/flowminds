@@ -1,4 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export type Lead = {
   id: string;
@@ -109,7 +109,8 @@ export async function fetchUpworkLeads(): Promise<Lead[]> {
 }
 
 export async function qualifyAndPropose(lead: Lead): Promise<ScoredLead | null> {
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
   const prompt = `You are Scout, FlowMinds' lead qualification agent.
 
@@ -135,20 +136,15 @@ Score:
 Return ONLY valid JSON.`;
 
   try {
-    const msg = await anthropic.messages.create({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 600,
-      messages: [{ role: "user", content: prompt }],
-    });
-
-    const raw = msg.content[0].type === "text" ? msg.content[0].text : "";
+    const result = await model.generateContent(prompt);
+    const raw = result.response.text();
     const jsonMatch = raw.match(/\{[\s\S]*\}/);
     if (!jsonMatch) return null;
 
-    const result = JSON.parse(jsonMatch[0]);
-    if (!result.score || !result.proposal) return null;
+    const parsed = JSON.parse(jsonMatch[0]);
+    if (!parsed.score || !parsed.proposal) return null;
 
-    return { ...lead, score: result.score, proposal: result.proposal };
+    return { ...lead, score: parsed.score, proposal: parsed.proposal };
   } catch {
     return null;
   }
