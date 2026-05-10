@@ -73,14 +73,19 @@ async function runScan() {
 
       // Send to Telegram only if score >= 7
       if (scored.score >= 7) {
-        const msg = `<b>SCOUT — New Lead Found</b>
+        const propEmoji = scored.proposals === 0 ? "🟢" : scored.proposals <= 5 ? "🟢" : scored.proposals <= 10 ? "🟡" : "🔴";
+        const clientInfo = scored.clientRating > 0
+          ? `⭐ ${scored.clientRating}/5 · ${scored.clientSpent} xərclənib`
+          : "Yeni müştəri";
+
+        const msg = `🎯 <b>SCOUT — New Lead Found</b>
+<b>━━━━━━━━━━━━━━━━━</b>
+📌 <b>${scored.title}</b>
+💰 ${scored.budget} · Score: <b>${scored.score}/10</b>
+${propEmoji} Müraciət: <b>${scored.proposals}</b> · ${clientInfo}
 <b>━━━━━━━━━━━━━━━━━</b>
 
-<b>Title:</b> ${scored.title}
-<b>Budget:</b> ${scored.budget}
-<b>Score:</b> ${scored.score}/10
-
-<b>Copy this proposal:</b>
+<b>Proposal:</b>
 <code>${scored.proposal}</code>`;
 
         const keyboard = {
