@@ -1,6 +1,9 @@
 {
   "functions": {
-    "app/api/scout/scan/route.ts": { "maxDuration": 300 }
+    "app/api/scout/scan/route.ts": { "maxDuration": 300 },
+    "app/api/telegram/webhook/route.ts": { "maxDuration": 60 },
+    "app/api/aria/reply/route.ts": { "maxDuration": 60 },
+    "app/api/iris/generate/route.ts": { "maxDuration": 120 }
   },
   "crons": [
     {
