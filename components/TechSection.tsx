@@ -1,6 +1,7 @@
 "use client";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { useLanguage } from "@/components/LanguageContext";
 
 const TECHS = [
   { name: "Next.js",        color: "#ffffff" },
@@ -22,6 +23,7 @@ const TECHS = [
 ];
 
 export default function TechSection() {
+  const { t } = useLanguage();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
@@ -38,13 +40,13 @@ export default function TechSection() {
           style={{ textAlign: "center", marginBottom: 48 }}
         >
           <span style={{ display: "inline-block", padding: "5px 14px", borderRadius: 999, border: "1px solid rgba(139,92,246,0.3)", background: "rgba(139,92,246,0.08)", color: "#A78BFA", fontSize: 12, marginBottom: 14 }}>
-            Our Stack
+            {t("techBadge")}
           </span>
           <h2 style={{ fontFamily: "var(--font-space)", fontSize: "clamp(1.7rem, 5vw, 2.8rem)", fontWeight: 800, color: "#F8F8FF" }}>
-            Built With The <span className="text-gradient">Best Tools</span>
+            {t("techTitlePrefix")} <span className="text-gradient">{t("techTitleHighlight")}</span>
           </h2>
           <p style={{ marginTop: 12, color: "#8B8B9A", fontSize: 15, maxWidth: 440, margin: "12px auto 0" }}>
-            Battle-tested, cutting-edge technologies that scale.
+            {t("techSubtitle")}
           </p>
         </motion.div>
 

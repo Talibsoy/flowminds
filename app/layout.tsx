@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { LanguageProvider } from "@/components/LanguageContext";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -60,9 +61,11 @@ export default function RootLayout({
         className="antialiased"
         style={{ overflowX: "hidden", maxWidth: "100%", width: "100%" }}
       >
-        <div style={{ overflowX: "hidden", width: "100%" }}>
-          {children}
-        </div>
+        <LanguageProvider>
+          <div style={{ overflowX: "hidden", width: "100%" }}>
+            {children}
+          </div>
+        </LanguageProvider>
       </body>
     </html>
   );

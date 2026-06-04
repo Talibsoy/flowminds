@@ -2,65 +2,66 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { ArrowUpRight, Plane, Music2, Cpu, Scale, Globe, Database } from "lucide-react";
+import { useLanguage } from "@/components/LanguageContext";
+import type { TranslationDictionary } from "@/lib/i18n";
 
-const projects = [
+type TKey = keyof TranslationDictionary;
+
+const projects: {
+  icon: typeof Plane;
+  title: string;
+  url: string | null;
+  color: string;
+  tagKey: TKey;
+  descKey: TKey;
+  resultKeys: [TKey, TKey, TKey];
+}[] = [
   {
     icon: Plane,
-    tag: "AI Travel Ecosystem",
     title: "NatoureFlY",
     url: "natoure.az",
-    desc: "Azerbaijan's first end-to-end AI travel platform — from WhatsApp message to confirmed booking, zero human involvement. AI agent 'Nigar' runs across WhatsApp, Messenger, Instagram and web in Azerbaijani, sourcing 500+ airline routes via Duffel, hotel inventory via Booking.com, CBAR real-time FX conversion, and AZN checkout via ePoint.az. Four-tier loyalty engine included.",
-    results: ["AI agent across 4 channels", "500+ airlines · Booking.com", "ePoint.az · Apple/Google Pay · Bronze→Platinum"],
     color: "#06B6D4",
+    tagKey: "p1Tag", descKey: "p1Desc", resultKeys: ["p1r1", "p1r2", "p1r3"],
   },
   {
     icon: Database,
-    tag: "Infrastructure Automation",
     title: "NatoureFlY Backend",
     url: null,
-    desc: "The operational backbone of natoure.az: Duffel + RateHawk daily price sync into Supabase, pgvector + Voyage AI semantic search enabling natural-language queries, automated tour packaging, weekly Telegram price reports — backed by AES-256-GCM encryption, webhook signature verification and server-side payment validation.",
-    results: ["pgvector semantic search (RAG)", "Daily auto tour packaging", "AES-256 · 3D Secure · Rate limiting"],
     color: "#0891B2",
+    tagKey: "p2Tag", descKey: "p2Desc", resultKeys: ["p2r1", "p2r2", "p2r3"],
   },
   {
     icon: Music2,
-    tag: "AI SaaS Platform",
     title: "PromptAZ Music",
     url: "promptazmusic.com",
-    desc: "Azerbaijan's first AI music SaaS — built around mugham intelligence. Generates Şur, Segah and Rast-aware prompts, produces audio via Suno API in real time, and writes Azerbaijani lyrics on demand. Three subscription tiers (Free / Pro / Studio) with automated billing and usage enforcement.",
-    results: ["Mugham-aware AI prompt engine", "Real-time audio via Suno API", "Free / Pro / Studio tiers"],
     color: "#A855F7",
+    tagKey: "p3Tag", descKey: "p3Desc", resultKeys: ["p3r1", "p3r2", "p3r3"],
   },
   {
     icon: Cpu,
-    tag: "Content Automation",
     title: "PromptAZ Backend",
     url: null,
-    desc: "The autonomous engine behind PromptAZ: Gemini AI writes and publishes daily SEO blog posts in Azerbaijani, new tracks auto-post to social platforms, the Qızıl Fond dataset expands continuously via scraping, Cloudflare Turnstile quotas self-manage, and weekly analytics land automatically. Zero human input.",
-    results: ["Daily Gemini AI blog (SEO)", "Qızıl Fond dataset pipeline", "Auto social · Turnstile self-management"],
     color: "#9333EA",
+    tagKey: "p4Tag", descKey: "p4Desc", resultKeys: ["p4r1", "p4r2", "p4r3"],
   },
   {
     icon: Scale,
-    tag: "LegalTech · Voice AI",
     title: "LexBot",
     url: null,
-    desc: "A voice-enabled legal assistant grounded in Azerbaijani legislation and international conventions. Answers complex legal queries in real time — no lawyer required for first-line research.",
-    results: ["Voice-enabled legal responses", "AZ legislation + intl. conventions", "Multilingual, citation-aware"],
     color: "#F59E0B",
+    tagKey: "p5Tag", descKey: "p5Desc", resultKeys: ["p5r1", "p5r2", "p5r3"],
   },
   {
     icon: Globe,
-    tag: "Meta · WhatsApp · Social",
     title: "Meta Automation Stack",
     url: null,
-    desc: "Enterprise-grade Meta automation: permanent token management for IG/FB/WA, Instagram DM flows, Facebook lead funnels, and WhatsApp Business chatbots handling 5,000+ messages daily — no manual renewal, no downtime.",
-    results: ["Permanent IG/FB/WA tokens", "5,000+ automated msgs/day", "DM flows · Lead funnels · Chatbots"],
     color: "#0866FF",
+    tagKey: "p6Tag", descKey: "p6Desc", resultKeys: ["p6r1", "p6r2", "p6r3"],
   },
 ];
 
 export default function ProjectsSection() {
+  const { t } = useLanguage();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -75,13 +76,13 @@ export default function ProjectsSection() {
           className="text-center mb-10 md:mb-14"
         >
           <span className="inline-block px-4 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-xs sm:text-sm text-cyan-300 mb-4">
-            Portfolio
+            {t("projectsBadge")}
           </span>
           <h2 className="font-bold" style={{ fontFamily: "var(--font-space)", fontSize: "clamp(1.75rem, 6vw, 3rem)" }}>
-            Featured <span className="text-gradient">Projects</span>
+            {t("projectsTitlePrefix")} <span className="text-gradient">{t("projectsTitleHighlight")}</span>
           </h2>
           <p className="mt-3 max-w-lg mx-auto text-sm sm:text-base" style={{ color: "#8B8B9A" }}>
-            Production systems running at scale — real businesses, real outcomes.
+            {t("projectsSubtitle")}
           </p>
         </motion.div>
 
@@ -110,7 +111,7 @@ export default function ProjectsSection() {
                       className="text-[10px] sm:text-xs font-medium px-2.5 py-1 rounded-full inline-block mb-2"
                       style={{ background: `${p.color}18`, color: p.color, border: `1px solid ${p.color}35` }}
                     >
-                      {p.tag}
+                      {t(p.tagKey)}
                     </span>
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-semibold text-white text-sm sm:text-base leading-tight" style={{ fontFamily: "var(--font-space)" }}>
@@ -146,15 +147,15 @@ export default function ProjectsSection() {
                     overflow: "hidden",
                   }}
                 >
-                  {p.desc}
+                  {t(p.descKey)}
                 </p>
 
                 {/* Results */}
                 <div className="flex flex-col gap-1.5 pt-1 border-t" style={{ borderColor: "#1E1E2E" }}>
-                  {p.results.map((r) => (
-                    <div key={r} className="flex items-start gap-2 text-xs" style={{ color: "#8B8B9A" }}>
+                  {p.resultKeys.map((rk) => (
+                    <div key={rk} className="flex items-start gap-2 text-xs" style={{ color: "#8B8B9A" }}>
                       <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1" style={{ background: p.color }} />
-                      {r}
+                      {t(rk)}
                     </div>
                   ))}
                 </div>
@@ -168,7 +169,7 @@ export default function ProjectsSection() {
                     className="flex items-center gap-1 text-xs font-medium group-hover:text-white transition-colors duration-200"
                     style={{ color: "#555566", textDecoration: "none" }}
                   >
-                    Visit {p.url}
+                    {t("projVisit")} {p.url}
                     <ArrowUpRight size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
                   </a>
                 ) : (
@@ -177,7 +178,7 @@ export default function ProjectsSection() {
                     className="flex items-center gap-1 text-xs font-medium transition-colors duration-200"
                     style={{ color: "#A855F7", textDecoration: "none" }}
                   >
-                    Request Demo
+                    {t("projRequestDemo")}
                     <ArrowUpRight size={12} />
                   </a>
                 )}

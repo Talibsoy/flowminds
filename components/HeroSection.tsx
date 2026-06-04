@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
+import { useLanguage } from "@/components/LanguageContext";
 
 const fade = (delay: number) => ({
   initial: { opacity: 0, y: 28 },
@@ -9,6 +10,7 @@ const fade = (delay: number) => ({
 });
 
 export default function HeroSection() {
+  const { t } = useLanguage();
   return (
     <section
       id="hero"
@@ -42,7 +44,7 @@ export default function HeroSection() {
         {/* Badge */}
         <motion.div {...fade(0)} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px", borderRadius: 999, border: "1px solid rgba(168,85,247,0.3)", background: "rgba(168,85,247,0.08)", color: "#C084FC", fontSize: 13, marginBottom: 24 }}>
           <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#22D3EE", flexShrink: 0, animation: "pulse-glow 2s ease-in-out infinite" }} />
-          AI-Powered Digital Agency
+          {t("heroBadge")}
         </motion.div>
 
         {/* Headline */}
@@ -58,9 +60,8 @@ export default function HeroSection() {
             letterSpacing: "-0.02em",
           }}
         >
-          We Build Systems<br />
-          That{" "}
-          <span className="text-gradient animate-gradient">Work For You</span>
+          {t("heroTitleLead")}{" "}
+          <span className="text-gradient animate-gradient">{t("heroTitleHighlight")}</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -68,8 +69,7 @@ export default function HeroSection() {
           {...fade(0.2)}
           style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.2rem)", color: "#8B8B9A", maxWidth: 540, margin: "0 auto 36px", lineHeight: 1.7 }}
         >
-          AI web development, social media automation, Meta integrations &
-          smart workflows — everything your business needs to scale.
+          {t("heroSubtitle")}
         </motion.p>
 
         {/* CTAs */}
@@ -84,7 +84,7 @@ export default function HeroSection() {
               color: "#fff", background: "linear-gradient(135deg, #7C3AED, #A855F7)",
               textDecoration: "none", minWidth: 200,
             }}>
-              Start Your Project <ArrowRight size={16} />
+              {t("heroCtaStart")} <ArrowRight size={16} />
             </a>
             <a href="#projects" style={{
               display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
@@ -92,7 +92,7 @@ export default function HeroSection() {
               color: "#C084FC", border: "1px solid rgba(168,85,247,0.3)",
               textDecoration: "none", minWidth: 160,
             }}>
-              <Play size={14} style={{ fill: "currentColor" }} /> See Our Work
+              <Play size={14} style={{ fill: "currentColor" }} /> {t("heroCtaWork")}
             </a>
           </div>
         </motion.div>
@@ -103,9 +103,9 @@ export default function HeroSection() {
           style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, maxWidth: 380, margin: "56px auto 0" }}
         >
           {[
-            { value: "50+", label: "Projects" },
-            { value: "99%", label: "Satisfaction" },
-            { value: "24/7", label: "Automation" },
+            { value: "50+", label: t("statProjects") },
+            { value: "99%", label: t("statSatisfaction") },
+            { value: "24/7", label: t("statAutomation") },
           ].map((s) => (
             <div key={s.label} style={{ textAlign: "center" }}>
               <div className="text-gradient" style={{ fontFamily: "var(--font-space)", fontSize: "clamp(1.4rem, 4vw, 2rem)", fontWeight: 800 }}>

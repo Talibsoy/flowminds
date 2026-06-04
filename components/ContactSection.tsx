@@ -2,10 +2,12 @@
 import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Send, CheckCircle, AlertCircle, Mail, MessageSquare, User } from "lucide-react";
+import { useLanguage } from "@/components/LanguageContext";
 
 type Status = "idle" | "loading" | "success" | "error";
 
 export default function ContactSection() {
+  const { t } = useLanguage();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const [status, setStatus] = useState<Status>("idle");
@@ -81,7 +83,7 @@ export default function ContactSection() {
             fontSize: 13,
             marginBottom: 16,
           }}>
-            Let&apos;s Talk
+            {t("contactBadge")}
           </span>
           <h2 style={{
             fontFamily: "var(--font-space)",
@@ -91,18 +93,18 @@ export default function ContactSection() {
             lineHeight: 1.15,
             margin: 0,
           }}>
-            Start Your{" "}
+            {t("contactTitlePrefix")}{" "}
             <span style={{
               background: "linear-gradient(135deg, #A855F7, #06B6D4)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
             }}>
-              Project
+              {t("contactTitleHighlight")}
             </span>
           </h2>
           <p style={{ marginTop: 12, color: "#8B8B9A", fontSize: 15 }}>
-            Tell us what you need. We&apos;ll get back within 24 hours.
+            {t("contactSubtitle")}
           </p>
         </motion.div>
 
@@ -128,7 +130,7 @@ export default function ContactSection() {
           <Field icon={<User size={15} color="#A855F7" />}>
             <input
               type="text"
-              placeholder="Your Name"
+              placeholder={t("formName")}
               required
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -142,7 +144,7 @@ export default function ContactSection() {
           <Field icon={<Mail size={15} color="#A855F7" />}>
             <input
               type="email"
-              placeholder="your@email.com"
+              placeholder={t("formEmail")}
               required
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -155,7 +157,7 @@ export default function ContactSection() {
           {/* Message */}
           <Field icon={<MessageSquare size={15} color="#A855F7" />} top>
             <textarea
-              placeholder="Tell us about your project..."
+              placeholder={t("formMessage")}
               required
               rows={4}
               value={form.message}
@@ -189,20 +191,20 @@ export default function ContactSection() {
           >
             {status === "loading"
               ? <span style={{ width: 20, height: 20, border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", borderRadius: "50%", animation: "spin 0.8s linear infinite", display: "inline-block" }} />
-              : <><Send size={15} /> Send Message</>
+              : <><Send size={15} /> {t("formSend")}</>
             }
           </button>
 
           {status === "success" && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               style={{ display: "flex", alignItems: "center", gap: 8, color: "#4ADE80", fontSize: 14 }}>
-              <CheckCircle size={15} /> Message sent! We&apos;ll be in touch soon.
+              <CheckCircle size={15} /> {t("formSuccess")}
             </motion.div>
           )}
           {status === "error" && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               style={{ display: "flex", alignItems: "center", gap: 8, color: "#F87171", fontSize: 14 }}>
-              <AlertCircle size={15} /> Something went wrong. Please try again.
+              <AlertCircle size={15} /> {t("formError")}
             </motion.div>
           )}
         </motion.form>

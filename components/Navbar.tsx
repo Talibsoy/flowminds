@@ -3,17 +3,51 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Logo from "@/components/Logo";
+import { useLanguage } from "@/components/LanguageContext";
+import type { Locale } from "@/lib/i18n";
 
-const LINKS = [
-  { label: "Services", href: "#services" },
-  { label: "Projects", href: "#projects" },
-  { label: "Tech",     href: "#tech" },
-  { label: "Contact",  href: "#contact" },
-];
+const LOCALES: Locale[] = ["az", "en", "tr"];
 
 export default function Navbar() {
+  const { t, language, setLanguage } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const LINKS = [
+    { label: t("navServices"), href: "#services" },
+    { label: t("navProjects"), href: "#projects" },
+    { label: t("navTech"),     href: "#tech" },
+    { label: t("navContact"),  href: "#contact" },
+  ];
+
+  const LangSwitcher = ({ compact }: { compact?: boolean }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 2, padding: 3, borderRadius: 999, border: "1px solid rgba(168,85,247,0.25)", background: "rgba(168,85,247,0.06)" }}>
+      {LOCALES.map((loc) => {
+        const active = language === loc;
+        return (
+          <button
+            key={loc}
+            onClick={() => setLanguage(loc)}
+            aria-label={`Switch language to ${loc.toUpperCase()}`}
+            style={{
+              padding: compact ? "5px 11px" : "4px 10px",
+              borderRadius: 999,
+              border: "none",
+              cursor: "pointer",
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: "0.02em",
+              color: active ? "#fff" : "#8B8B9A",
+              background: active ? "linear-gradient(135deg,#7C3AED,#A855F7)" : "transparent",
+              transition: "color 0.2s, background 0.2s",
+            }}
+          >
+            {loc.toUpperCase()}
+          </button>
+        );
+      })}
+    </div>
+  );
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 40);
@@ -61,13 +95,16 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* CTA */}
-        <a href="#contact"
-          className="glow-purple nav-cta"
-          style={{ display: "none", padding: "9px 22px", borderRadius: 999, fontSize: 14, fontWeight: 700, color: "#fff", background: "linear-gradient(135deg,#7C3AED,#A855F7)", textDecoration: "none" }}
-        >
-          Get Started
-        </a>
+        {/* CTA + language switcher (desktop) */}
+        <div className="nav-cta" style={{ display: "none", alignItems: "center", gap: 14 }}>
+          <LangSwitcher />
+          <a href="#contact"
+            className="glow-purple"
+            style={{ padding: "9px 22px", borderRadius: 999, fontSize: 14, fontWeight: 700, color: "#fff", background: "linear-gradient(135deg,#7C3AED,#A855F7)", textDecoration: "none" }}
+          >
+            {t("navGetStarted")}
+          </a>
+        </div>
 
         {/* Mobile toggle */}
         <button
@@ -99,9 +136,12 @@ export default function Navbar() {
                 </li>
               ))}
               <li>
+                <LangSwitcher compact />
+              </li>
+              <li>
                 <a href="#contact" onClick={() => setOpen(false)}
                   style={{ display: "inline-block", padding: "10px 24px", borderRadius: 999, fontSize: 14, fontWeight: 700, color: "#fff", background: "linear-gradient(135deg,#7C3AED,#A855F7)", textDecoration: "none" }}>
-                  Get Started
+                  {t("navGetStarted")}
                 </a>
               </li>
             </ul>
@@ -112,7 +152,7 @@ export default function Navbar() {
       <style>{`
         @media (min-width: 768px) {
           .nav-desktop { display: flex !important; }
-          .nav-cta     { display: inline-block !important; }
+          .nav-cta     { display: flex !important; }
           .nav-toggle  { display: none !important; }
         }
       `}</style>

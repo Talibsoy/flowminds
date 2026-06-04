@@ -1,13 +1,17 @@
+"use client";
 import { X, ExternalLink, Phone, MessageCircle } from "lucide-react";
 import Logo from "@/components/Logo";
-
-const links = {
-  Services: ["AI Web Development", "Social Media Automation", "Meta Solutions", "Code Automation"],
-  Company: ["About", "Projects", "Tech Stack", "Contact"],
-};
+import { useLanguage } from "@/components/LanguageContext";
+import type { TranslationDictionary } from "@/lib/i18n";
 
 export default function Footer() {
+  const { t } = useLanguage();
   const year = new Date().getFullYear();
+
+  const columns: { titleKey: keyof TranslationDictionary; itemKeys: (keyof TranslationDictionary)[] }[] = [
+    { titleKey: "footerColServices", itemKeys: ["footerSvc1", "footerSvc2", "footerSvc3", "footerSvc4"] },
+    { titleKey: "footerColCompany", itemKeys: ["footerCompany1", "footerCompany2", "footerCompany3", "footerCompany4"] },
+  ];
   return (
     <footer className="relative py-12 md:py-16 border-t" style={{ borderColor: "#1E1E2E", overflow: "clip" }}>
       <div className="w-full max-w-7xl mx-auto px-5 sm:px-8">
@@ -20,7 +24,7 @@ export default function Footer() {
               </span>
             </a>
             <p className="text-sm leading-relaxed max-w-xs" style={{ color: "#8B8B9A" }}>
-              AI-powered digital systems that automate, scale, and grow your business — while you sleep.
+              {t("footerTagline")}
             </p>
             {/* Contact info */}
             <div className="flex flex-col gap-2 mt-5">
@@ -60,16 +64,16 @@ export default function Footer() {
             </div>
           </div>
 
-          {Object.entries(links).map(([title, items]) => (
-            <div key={title}>
+          {columns.map((col) => (
+            <div key={col.titleKey}>
               <h4 className="text-sm font-semibold text-white mb-4" style={{ fontFamily: "var(--font-space)" }}>
-                {title}
+                {t(col.titleKey)}
               </h4>
               <ul className="flex flex-col gap-2.5">
-                {items.map((item) => (
-                  <li key={item}>
+                {col.itemKeys.map((itemKey) => (
+                  <li key={itemKey}>
                     <a href="#" className="text-xs sm:text-sm hover:text-white transition-colors duration-200" style={{ color: "#8B8B9A" }}>
-                      {item}
+                      {t(itemKey)}
                     </a>
                   </li>
                 ))}
@@ -80,10 +84,10 @@ export default function Footer() {
 
         <div className="mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 border-t text-xs"
           style={{ borderColor: "#1E1E2E", color: "#8B8B9A" }}>
-          <span>© {year} FlowMinds. All rights reserved.</span>
+          <span>{t("footerRights", { year: String(year) })}</span>
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-            All systems operational
+            {t("footerOperational")}
           </div>
         </div>
       </div>
