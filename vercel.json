@@ -11,10 +11,6 @@
       "schedule": "0 7 * * *"
     },
     {
-      "path": "/api/scout/scan",
-      "schedule": "0 7 * * *"
-    },
-    {
       "path": "/api/doe/report",
       "schedule": "0 6 * * *"
     }

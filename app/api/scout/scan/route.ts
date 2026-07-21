@@ -42,6 +42,12 @@ export async function POST(req: NextRequest) {
 }
 
 async function runScan() {
+  // Müvəqqəti dayandırmaq üçün IS_PAUSED = true edin
+  const IS_PAUSED = true;
+  if (IS_PAUSED) {
+    return NextResponse.json({ success: true, message: "SCOUT scan is temporarily paused." });
+  }
+
   const db = getDb();
   let found = 0;
   let sent = 0;
