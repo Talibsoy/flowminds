@@ -5,14 +5,5 @@
     "app/api/aria/reply/route.ts": { "maxDuration": 60 },
     "app/api/iris/generate/route.ts": { "maxDuration": 120 }
   },
-  "crons": [
-    {
-      "path": "/api/iris/generate",
-      "schedule": "0 7 * * *"
-    },
-    {
-      "path": "/api/doe/report",
-      "schedule": "0 6 * * *"
-    }
-  ]
+  "crons": []
 }

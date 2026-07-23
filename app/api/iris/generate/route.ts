@@ -24,6 +24,11 @@ export async function POST(req: NextRequest) {
 }
 
 async function handleGenerate() {
+  // Müvəqqəti dayandırmaq üçün IS_PAUSED = true edin
+  const IS_PAUSED = true;
+  if (IS_PAUSED) {
+    return NextResponse.json({ success: true, message: "IRIS generate is temporarily paused." });
+  }
 
   const service = getTodayService();
   const prompt = buildIrisPrompt(service);

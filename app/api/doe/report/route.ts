@@ -19,6 +19,12 @@ async function sendTelegram(text: string): Promise<void> {
 }
 
 async function buildReport(): Promise<NextResponse> {
+  // Müvəqqəti dayandırmaq üçün IS_PAUSED = true edin
+  const IS_PAUSED = true;
+  if (IS_PAUSED) {
+    return NextResponse.json({ success: true, message: "DOE report is temporarily paused." });
+  }
+
   const db = getDb();
   const now = new Date();
   const yesterday = new Date(now.getTime() - 86400000).toISOString();
